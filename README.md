@@ -97,10 +97,10 @@ Run `hostile`:
 
 ```bash
 hostile clean \
-  --input1 /data/analysis/qc/sample_trimmed_R1.fastq.gz \
-  --input2 /data/analysis/qc/sample_trimmed_R2.fastq.gz \
-  --output1 /data/analysis/qc/sample_clean_R1.fastq.gz \
-  --output2 /data/analysis/qc/sample_clean_R2.fastq.gz \
+  --input1 reads/qc/sample_trimmed_R1.fastq.gz \
+  --input2 reads/qc/sample_trimmed_R2.fastq.gz \
+  --output1 reads/qc/sample_clean_R1.fastq.gz \
+  --output2 reads/qc/sample_clean_R2.fastq.gz \
   --threads 8
 ```
 
