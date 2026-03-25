@@ -63,6 +63,12 @@ Assume the raw reads are:
 - `/data/analysis/raw_reads/sample_R1.fastq.gz`
 - `/data/analysis/raw_reads/sample_R2.fastq.gz`
 
+```bash
+wget https://raw.githubusercontent.com/biobakery/kneaddata/refs/heads/master/examples/demoR_1.fastq -O reads/raw/demoR_R1.fastq
+
+wget https://raw.githubusercontent.com/biobakery/kneaddata/refs/heads/master/examples/demoR_2.fastq -O reads/raw/demoR_R2.fastq
+```
+
 Activate the environment:
 
 ```bash
