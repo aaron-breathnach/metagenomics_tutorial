@@ -84,12 +84,12 @@ Run `fastp`:
 
 ```bash
 fastp \
-  -i /data/analysis/raw_reads/sample_R1.fastq.gz \
-  -I /data/analysis/raw_reads/sample_R2.fastq.gz \
-  -o /data/analysis/qc/sample_trimmed_R1.fastq.gz \
-  -O /data/analysis/qc/sample_trimmed_R2.fastq.gz \
-  --html /data/analysis/qc/sample_fastp.html \
-  --json /data/analysis/qc/sample_fastp.json \
+  -i reads/raw/sample_R1.fastq.gz \
+  -I reads/raw/sample_R2.fastq.gz \
+  -o reads/qc/sample_trimmed_R1.fastq.gz \
+  -O reads/qc/sample_trimmed_R2.fastq.gz \
+  --html reads/qc/sample_fastp.html \
+  --json reads/qc/sample_fastp.json \
   --thread 8
 ```
 
