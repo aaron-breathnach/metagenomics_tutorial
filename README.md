@@ -142,7 +142,7 @@ mkdir -p metaphlan/bt2 metaphlan/txt metaphlan/sam
 
 metaphlan reads/qc/sample_trimmed_R1.clean_1.fastq.gz,reads/qc/sample_trimmed_R2.clean_2.fastq.gz \
 --input_type fastq \
---db_dir /data/Food/analysis/R2560_prepop/aaron/databases/metaphlan/mpa_vJan25_CHOCOPhlAnSGB_202503 \
+--db_dir $wd/metaphlan/mpa_vJan25_CHOCOPhlAnSGB_202503 \
 --mapout output/metaphlan/bt2/sample.profiled_metagenome.bt2 \
 -o output/metaphlan/txt/sample.profiled_metagenome.txt \
 -s output/metaphlan/sam/sample.profiled_metagenome.sam \
