@@ -175,7 +175,12 @@ cat reads/qc/sample_clean_R1.fastq.gz reads/qc/sample_clean_R2.fastq.gz > $wd/hu
 Then run HUMAnN:
 
 ```bash
-humann   --input $wd/humann/sample_merged.fastq.gz   --output $wd/humann   --threads 8   --nucleotide-database $wd/databases/humann/chocophlan   --protein-database $wd/databases/humann/uniref
+humann \
+--input $wd/humann/sample_merged.fastq.gz \
+--output $wd/humann \
+--threads 8 \
+--nucleotide-database $wd/databases/humann/chocophlan \
+--protein-database $wd/databases/humann/uniref
 ```
 
 ---
