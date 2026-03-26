@@ -6,26 +6,43 @@ This repository contains a simple teaching workflow for shotgun metagenomics on 
 
 The tutorial covers:
 
-1. Installing Miniforge and mamba in `/data/analysis`
+1. Installing Miniforge and mamba
 2. Creating a `qc` environment with `fastp` and `hostile`
 3. Running `fastp` and `hostile` on a single paired-end sample
-4. Creating a `metaphlan` environment and installing the MetaPhlAn database in `/data/analysis/databases/metaphlan`
+4. Creating a `metaphlan` environment and installing the MetaPhlAn database
 5. Running MetaPhlAn on the cleaned sample
-6. Creating a `humann` environment and installing the HUMAnN databases in `/data/analysis/databases/humann`
+6. Creating a `humann` environment and installing the HUMAnN databases
 7. Running HUMAnN on the cleaned sample
 8. Submitting jobs with SLURM batch scripts
+
+---
+
+## Working directory setup
+
+Choose a working directory where you want to perform the analysis. For example:
+
+```bash
+wd=/data/analysis
+mkdir -p $wd
+cd $wd
+```
+
+All subsequent commands assume you are working from `$wd`.
+
+---
 
 ## Suggested directory structure
 
 ```bash
-/data/analysis/
+$wd/
 ├── miniforge3/
 ├── databases/
 │   ├── metaphlan/
 │   └── humann/
 ├── logs/
-├── raw_reads/
-├── qc/
+├── reads/
+│   ├── raw/
+│   └── qc/
 ├── metaphlan/
 ├── humann/
 └── scripts/
@@ -34,125 +51,117 @@ The tutorial covers:
 Create the directories:
 
 ```bash
-mkdir -p /data/analysis/{databases,logs,raw_reads,qc,metaphlan,humann,scripts}
+mkdir -p $wd/{databases,logs,reads/raw,reads/qc,metaphlan,humann,scripts}
 ```
+
+---
 
 ## 1. Install Miniforge and mamba
 
 ```bash
-cd /data/analysis
+cd $wd
 
 wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
-bash Miniforge3-Linux-x86_64.sh -b -p /data/analysis/miniforge3
+bash Miniforge3-Linux-x86_64.sh -b -p $wd/miniforge3
 
-source /data/analysis/miniforge3/bin/activate
-conda install -y -n base -c conda-forge mamba
+$wd/miniforge3/bin/conda init
+source ~/.bashrc
 ```
+
+---
 
 ## 2. Create the QC environment
 
 ```bash
-source /data/analysis/miniforge3/bin/activate
 mamba create -y -n qc -c conda-forge -c bioconda fastp hostile
 ```
 
+---
+
 ## 3. Run QC on a single paired-end sample
 
-Assume the raw reads are:
-
-- `/data/analysis/raw_reads/sample_R1.fastq.gz`
-- `/data/analysis/raw_reads/sample_R2.fastq.gz`
+Download example reads:
 
 ```bash
-wget https://raw.githubusercontent.com/biobakery/kneaddata/refs/heads/master/examples/demoR_1.fastq -O reads/raw/sample_R1.fastq
+mkdir -p reads/raw
+mkdir -p reads/qc
 
+wget https://raw.githubusercontent.com/biobakery/kneaddata/refs/heads/master/examples/demoR_1.fastq -O reads/raw/sample_R1.fastq
 wget https://raw.githubusercontent.com/biobakery/kneaddata/refs/heads/master/examples/demoR_2.fastq -O reads/raw/sample_R2.fastq
 
 gzip reads/raw/*
-
-
 ```
 
 Activate the environment:
 
 ```bash
-source /data/analysis/miniforge3/bin/activate
 conda activate qc
 ```
 
 Run `fastp`:
 
 ```bash
-fastp \
-  -i reads/raw/sample_R1.fastq.gz \
-  -I reads/raw/sample_R2.fastq.gz \
-  -o reads/qc/sample_trimmed_R1.fastq.gz \
-  -O reads/qc/sample_trimmed_R2.fastq.gz \
-  --html reads/qc/sample_fastp.html \
-  --json reads/qc/sample_fastp.json \
-  --thread 8
+fastp   -i reads/raw/sample_R1.fastq.gz   -I reads/raw/sample_R2.fastq.gz   -o reads/qc/sample_trimmed_R1.fastq.gz   -O reads/qc/sample_trimmed_R2.fastq.gz   --html reads/qc/sample_fastp.html   --json reads/qc/sample_fastp.json   --thread 8
 ```
 
 Run `hostile`:
 
 ```bash
-hostile clean \
-  --fastq1 reads/qc/sample_trimmed_R1.fastq.gz \
-  --fastq2 reads/qc/sample_trimmed_R2.fastq.gz \
-  --threads 8
+hostile clean   --fastq1 reads/qc/sample_trimmed_R1.fastq.gz   --fastq2 reads/qc/sample_trimmed_R2.fastq.gz -o reads/qc --threads 8
 ```
+
+---
 
 ## 4. Create the MetaPhlAn environment and install the database
 
 ```bash
-source /data/analysis/miniforge3/bin/activate
 mamba create -y -n metaphlan -c bioconda -c conda-forge metaphlan
 conda activate metaphlan
 
-mkdir -p /data/analysis/databases/metaphlan
-metaphlan --install --bowtie2db /data/analysis/databases/metaphlan
+mkdir -p $wd/databases/metaphlan
+metaphlan --install --bowtie2db $wd/databases/metaphlan
 ```
+
+---
 
 ## 5. Run MetaPhlAn
 
 ```bash
-metaphlan /data/analysis/qc/sample_clean_R1.fastq.gz,/data/analysis/qc/sample_clean_R2.fastq.gz \
-  --input_type fastq \
-  --bowtie2db /data/analysis/databases/metaphlan \
-  --nproc 8 \
-  -o /data/analysis/metaphlan/sample_profile.txt
+mkdir -p metaphlan/bt2 metaphlan/txt metaphlan/sam
+
+ metaphlan reads/qc/sample_trimmed_R1.clean_1.fastq.gz,reads/qc/sample_trimmed_R2.clean_2.fastq.gz --input_type fastq --db_dir /data/Food/analysis/R2560_prepop/aaron/databases/metaphlan/mpa_vJan25_CHOCOPhlAnSGB_202503 --mapout output/metaphlan/bt2/sample.profiled_metagenome.bt2 -o output/metaphlan/txt/sample.profiled_metagenome.txt -s output/metaphlan/sam/sample.profiled_metagenome.sam --nproc 4
 ```
+
+---
 
 ## 6. Create the HUMAnN environment and install the databases
 
 ```bash
-source /data/analysis/miniforge3/bin/activate
 mamba create -y -n humann -c biobakery -c bioconda -c conda-forge humann
 conda activate humann
 
-mkdir -p /data/analysis/databases/humann
-humann_databases --download chocophlan full /data/analysis/databases/humann
-humann_databases --download uniref uniref90_diamond /data/analysis/databases/humann
+mkdir -p $wd/databases/humann
+humann_databases --download chocophlan full $wd/databases/humann
+humann_databases --download uniref uniref90_diamond $wd/databases/humann
 ```
+
+---
 
 ## 7. Run HUMAnN
 
 HUMAnN expects a single input file. For paired-end reads, concatenate the cleaned reads first:
 
 ```bash
-cat /data/analysis/qc/sample_clean_R1.fastq.gz /data/analysis/qc/sample_clean_R2.fastq.gz > /data/analysis/humann/sample_merged.fastq.gz
+cat reads/qc/sample_clean_R1.fastq.gz reads/qc/sample_clean_R2.fastq.gz > $wd/humann/sample_merged.fastq.gz
 ```
 
 Then run HUMAnN:
 
 ```bash
-humann \
-  --input /data/analysis/humann/sample_merged.fastq.gz \
-  --output /data/analysis/humann \
-  --threads 8 \
-  --nucleotide-database /data/analysis/databases/humann/chocophlan \
-  --protein-database /data/analysis/databases/humann/uniref
+humann   --input $wd/humann/sample_merged.fastq.gz   --output $wd/humann   --threads 8   --nucleotide-database $wd/databases/humann/chocophlan   --protein-database $wd/databases/humann/uniref
 ```
+
+---
 
 ## 8. Running on a SLURM HPC
 
@@ -169,6 +178,8 @@ squeue -u $USER
 scancel JOBID
 sacct -j JOBID
 ```
+
+---
 
 ## Notes
 
