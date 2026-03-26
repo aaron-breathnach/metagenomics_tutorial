@@ -101,13 +101,24 @@ conda activate qc
 Run `fastp`:
 
 ```bash
-fastp   -i reads/raw/sample_R1.fastq.gz   -I reads/raw/sample_R2.fastq.gz   -o reads/qc/sample_trimmed_R1.fastq.gz   -O reads/qc/sample_trimmed_R2.fastq.gz   --html reads/qc/sample_fastp.html   --json reads/qc/sample_fastp.json   --thread 8
+fastp \
+-i reads/raw/sample_R1.fastq.gz \
+-I reads/raw/sample_R2.fastq.gz \
+-o reads/qc/sample_trimmed_R1.fastq.gz \
+-O reads/qc/sample_trimmed_R2.fastq.gz \
+--html reads/qc/sample_fastp.html \
+--json reads/qc/sample_fastp.json \
+--thread 4
 ```
 
 Run `hostile`:
 
 ```bash
-hostile clean   --fastq1 reads/qc/sample_trimmed_R1.fastq.gz   --fastq2 reads/qc/sample_trimmed_R2.fastq.gz -o reads/qc --threads 8
+hostile clean \
+--fastq1 reads/qc/sample_trimmed_R1.fastq.gz \
+--fastq2 reads/qc/sample_trimmed_R2.fastq.gz \
+-o reads/qc \
+--threads 4
 ```
 
 ---
@@ -129,7 +140,13 @@ metaphlan --install --bowtie2db $wd/databases/metaphlan
 ```bash
 mkdir -p metaphlan/bt2 metaphlan/txt metaphlan/sam
 
- metaphlan reads/qc/sample_trimmed_R1.clean_1.fastq.gz,reads/qc/sample_trimmed_R2.clean_2.fastq.gz --input_type fastq --db_dir /data/Food/analysis/R2560_prepop/aaron/databases/metaphlan/mpa_vJan25_CHOCOPhlAnSGB_202503 --mapout output/metaphlan/bt2/sample.profiled_metagenome.bt2 -o output/metaphlan/txt/sample.profiled_metagenome.txt -s output/metaphlan/sam/sample.profiled_metagenome.sam --nproc 4
+metaphlan reads/qc/sample_trimmed_R1.clean_1.fastq.gz,reads/qc/sample_trimmed_R2.clean_2.fastq.gz \
+--input_type fastq \
+--db_dir /data/Food/analysis/R2560_prepop/aaron/databases/metaphlan/mpa_vJan25_CHOCOPhlAnSGB_202503 \
+--mapout output/metaphlan/bt2/sample.profiled_metagenome.bt2 \
+-o output/metaphlan/txt/sample.profiled_metagenome.txt \
+-s output/metaphlan/sam/sample.profiled_metagenome.sam \
+--nproc 4
 ```
 
 ---
