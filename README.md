@@ -160,6 +160,8 @@ conda activate humann
 mkdir -p $wd/databases/humann
 humann_databases --download chocophlan full $wd/databases/humann
 humann_databases --download uniref uniref90_diamond $wd/databases/humann
+
+## install the 
 ```
 
 ---
@@ -176,11 +178,13 @@ Then run HUMAnN:
 
 ```bash
 humann \
---input $wd/humann/sample_merged.fastq.gz \
---output $wd/humann \
---threads 8 \
---nucleotide-database $wd/databases/humann/chocophlan \
---protein-database $wd/databases/humann/uniref
+-i reads/processed/{prefix}.fastq.gz \
+-o output/humann/{prefix} \
+--threads {threads} \
+--bypass-translated-search \
+--nucleotide-database databases/humann/chocophlan \
+--metaphlan-options "--bowtie2db databases/metaphlan/mpa_vJun23_CHOCOPhlAnSGB_202403 -x mpa_vJun23_CHOCOPhlAnSGB_202403" \
+--remove-temp-output
 ```
 
 ---
