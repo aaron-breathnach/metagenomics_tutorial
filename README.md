@@ -178,7 +178,7 @@ Then run HUMAnN:
 
 ```bash
 humann \
--i reads/processed/{prefix}.fastq.gz \
+-i output/humann/{prefix}.fastq.gz \
 -o output/humann/{prefix} \
 --threads {threads} \
 --bypass-translated-search \
