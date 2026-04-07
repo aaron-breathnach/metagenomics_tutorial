@@ -12,7 +12,7 @@ prefixes = [x.replace('_L001_R1_001.fastq.gz', '') for x in os.listdir('reads/ra
 fastp = 'fastp -i reads/raw/{prefix}_L001_R1_001.fastq.gz -I reads/raw/{prefix}_L001_R2_001.fastq.gz -o reads/fastp/{prefix}_L001_R1_001.fastq.gz -O reads/fastp/{prefix}_L001_R2_001.fastq.gz -j reads/fastp/{prefix}.json -h reads/fastp/{prefix}.html --thread 16'
 
 ## write the shell script
-with open('scripts/run_fastq.sh', 'w') as f:
+with open('scripts/run_fastp.sh', 'w') as f:
   for prefix in prefixes:
     cmd = fastp.format(prefix=prefix)
     f.write(cmd + '\n')
