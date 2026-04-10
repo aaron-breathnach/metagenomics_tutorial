@@ -1,6 +1,3 @@
-MGB_1084_04_01_S151_L001_R1_001.clean_1.fastq.gz
-MGB_1084_04_01_S151_L001_R2_001.clean_2.fastq.gz
-
 import os
 
 ## note: run this from your data directory
@@ -13,6 +10,8 @@ for output_dir in output_dirs:
 
 ## list the sample IDs
 prefixes = [x.replace('_L001_R1_001.clean_1.fastq.gz', '') for x in os.listdir('reads/hostile') if '_R1_' in x]
+
+## prefix = 'MGB_1084_04_01_S151'
 
 metaphlan = '''
 metaphlan reads/hostile/{prefix}_L001_R1_001.clean_1.fastq.gz,reads/hostile/{prefix}_L001_R2_001.clean_2.fastq.gz  
