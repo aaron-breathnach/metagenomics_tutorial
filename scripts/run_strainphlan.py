@@ -3,10 +3,10 @@ import os
 from pathlib import Path
 
 sample2markers = '''sample2markers.py \
--i {bam} \
+-i {sam} \
 -o {consensus_markers} \
 -d {pkl} \
--f bam \
+-f sam \
 --nproc {threads}'''
 
 extract_markers = '''extract_markers.py \
@@ -32,11 +32,11 @@ for out_dir in out_dirs:
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
-bams = [x.as_posix() for x in Path('output/metaphlan/sam').rglob('*.bam')]
+sams = [x.as_posix() for x in Path('output/metaphlan/sam').rglob('*.sam')]
 
 cmds = []
-for bam in bams:
-    cmd = sample2markers.format(bam=bam, consensus_markers=out_dirs[0], pkl=pkl, threads=threads)
+for sam in sams:
+    cmd = sample2markers.format(sam=sam, consensus_markers=out_dirs[0], pkl=pkl, threads=threads)
     cmds.append(cmd)
 
 cmds.append(extract_markers.format(pkl=pkl, clade=clade, clade_markers=out_dirs[1]))
