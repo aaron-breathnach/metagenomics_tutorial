@@ -42,6 +42,6 @@ for sam in sams:
 cmds.append(extract_markers.format(pkl=pkl, clade=clade, clade_markers=out_dirs[1]))
 cmds.append(strainphlan.format(clade_markers=out_dirs[1], clade=clade, output=out_dirs[2], threads=threads, pkl=pkl))
 
-for cmd in cmds:
-    with open(f'scripts/run_strainphlan_{clade}.sh', 'w') as f:
+with open(f'scripts/run_strainphlan_{clade}.sh', 'w') as f:
+    for cmd in cmds:
         f.write(cmd + '\n')
