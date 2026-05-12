@@ -1,0 +1,10 @@
+cd /data/Food/analysis/R2560_prepop/klara/reads/raw/
+
+cat GutBrainF2Pl1-1050-01-01_S44_L001_R1_001.fastq.gz GutBrainF2Pl1-1050-01-01_S44_L002_R1_001.fastq.gz > MGB_1050_01_01_S14_L001_R1_001.fastq.gz
+cat GutBrainF2Pl1-1050-01-01_S44_L001_R2_001.fastq.gz GutBrainF2Pl1-1050-01-01_S44_L002_R2_001.fastq.gz > MGB_1050_01_01_S14_L001_R2_001.fastq.gz
+
+rm GutBrainF2Pl1-1050-01-01_S44_L00*
+
+cd ../reads
+rm fastp/MGB_1050_01_01_S14*
+rm hostile/MGB_1050_01_01_S14*
