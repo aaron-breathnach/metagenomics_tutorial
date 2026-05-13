@@ -21,7 +21,7 @@ def get_read_summary(prefix):
             'after_hostile': after_hostile
         }
 
-with open('../aaron/read_summaries.tsv', 'w') as f:
+with open('read_summaries.tsv', 'w') as f:
     f.write('sample_id\tbefore_filtering\tafter_filtering\tafter_hostile\n')
     summaries = []
     prefixes = [x.replace('_L001_R1_001.fastq.gz', '') for x in os.listdir('reads/raw') if '_R1_' in x]
